@@ -10,4 +10,8 @@
     <string name="password">Password</string>
     <string name="favourite">Favourite</string>
     <string name="home">Home</string>
+    <string name="news">News</string>
+    <string name="title">Title</string>
+    <string name="auther">auther</string>
+    <string name="desc">description</string>
 </resources>
