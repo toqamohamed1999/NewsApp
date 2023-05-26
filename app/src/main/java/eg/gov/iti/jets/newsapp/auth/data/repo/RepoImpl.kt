@@ -8,7 +8,6 @@ import eg.gov.iti.jets.newsapp.base.remote.SignUpAPIInterface
 
 class RepoImpl(private val signUpAPIInterface: SignUpAPIInterface):AuthRepo {
     override suspend fun signUpSignUpModel(key: String, userMode: SignUpModel): SignUpResponse {
-
       return signUpAPIInterface.signUpUser(key,userMode)
     }
 }

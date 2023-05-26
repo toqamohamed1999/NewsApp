@@ -6,24 +6,17 @@ import android.content.SharedPreferences
 class SharedOperations private constructor() {
 
     companion object {
-        private var instance :SharedOperations? = null
         private lateinit var  context: Context
-
+        private lateinit var sharedPrefs: SharedPreferences
         fun initSharedPrefs(context: Context) {
             this.context = context
-        }
-
-        fun getInstance(): SharedPreferences{
-            return  context.getSharedPreferences("CurrentUser",Context.MODE_PRIVATE)
-        }
-
-        private val sharedPrefs: SharedPreferences
-
-        init {
             sharedPrefs =
-                context.applicationContext.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE)
+                Companion.context.applicationContext.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE)
         }
 
+        fun getInstance(): SharedPreferences {
+            return context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE)
+        }
         fun setCurrentUserData(userName: String, password: String, email: String) {
             val tempPrefs = sharedPrefs.edit()
 
