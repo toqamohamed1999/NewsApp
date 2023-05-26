@@ -1,22 +1,37 @@
 package eg.gov.iti.jets.newsapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import eg.gov.iti.jets.newsapp.auth.domain.model.SignUpModel
-import eg.gov.iti.jets.newsapp.auth.signup.data.model.SignUpResponse
-import eg.gov.iti.jets.newsapp.base.remote.APIClient
-import eg.gov.iti.jets.newsapp.newsscreen.data.local.ArticleLocalSource
-import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
-import eg.gov.iti.jets.newsapp.newsscreen.domain.model.ArticleSource
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import javax.xml.transform.Source
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var bottomNavigation: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val navController: NavController =
+            Navigation.findNavController(this, R.id.nav_host_fragment)
+        bottomNavigation = findViewById(R.id.bottomNavigationView)
+        NavigationUI.setupWithNavController(bottomNavigation, navController)
+        setUpNavBottom(navController)
 
     }
+
+    private fun setUpNavBottom(navController: NavController) {
+        navController.addOnDestinationChangedListener { _, navDestination, _ ->
+            if (navDestination.id == R.id.signUpFragment || navDestination.id == R.id.loginFragment
+            ) {
+                bottomNavigation.visibility = View.GONE
+            } else {
+                bottomNavigation.visibility = View.VISIBLE
+            }
+        }
+    }
+
+
 }
