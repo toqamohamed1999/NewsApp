@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">NewsApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="LogIn">LogIn</string>
+    <string name="login">Log In</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="registration">Registration</string>
     <string name="do_you_have_an_account">Do You Have an Account ..</string>
