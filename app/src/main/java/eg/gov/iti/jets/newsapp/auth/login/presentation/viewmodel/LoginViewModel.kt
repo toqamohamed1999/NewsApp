@@ -7,6 +7,7 @@ import eg.gov.iti.jets.newsapp.auth.login.data.local.LoginRepoImpl
 import eg.gov.iti.jets.newsapp.auth.login.data.model.LoginModel
 import eg.gov.iti.jets.newsapp.auth.login.data.model.LoginResponse
 import eg.gov.iti.jets.newsapp.auth.login.data.remote.LoginResponseState
+import eg.gov.iti.jets.newsapp.base.local.sharedPrefs.SharedOperations
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,8 +25,12 @@ class LoginViewModel(private val loginRepo:LoginRepoImpl): ViewModel() {
          }
         }
     }
+    fun checkUserInSharedPrefs():LoginModel{
+       val it = SharedOperations.getCurrentUserData()
+        return LoginModel(it.third?:"",it.second?:"",true)
+    }
     fun validateEmail(email:String):Boolean{
-    return true
+        return true
     }
     fun validatePassword(password:String):Boolean{
         return true
