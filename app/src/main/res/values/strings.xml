@@ -10,4 +10,13 @@
     <string name="password">Password</string>
     <string name="favourite">Favourite</string>
     <string name="home">Home</string>
+    <string name="username">Username</string>
+    <string name="required">Required</string>
+    <string name="validatePassword">Password must have at least one numeric character ,one uppercase character,one lowercase character,one special symbol among @#$% and Password length should be between 8 and 20.</string>
+    <string name="validateEmail">Your Email must match userName@gmail.com</string>
+    <string name="emailNameEmpty">Email must not be empty</string>
+    <string name="passwordEmpty">Password must not be empty</string>
+    <string name="userNameEmpty">Username must not be empty</string>
+    <string name="success">Sign up Successfully</string>
+    <string name="failed">Failed to try Data</string>
 </resources>

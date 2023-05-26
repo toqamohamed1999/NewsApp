@@ -1,7 +1,7 @@
 package eg.gov.iti.jets.newsapp.base.remote
 
 import eg.gov.iti.jets.newsapp.auth.login.data.remote.LoginAPIInterface
-import eg.gov.iti.jets.newsapp.util.BASE_URL
+import eg.gov.iti.jets.newsapp.util.Constants
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object AppRetrofit {
 
     val retrofit: Retrofit =  Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(Constants.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 }
