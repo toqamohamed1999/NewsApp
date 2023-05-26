@@ -23,7 +23,11 @@ class SharedOperations private constructor() {
             sharedPrefs =
                 context.applicationContext.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE)
         }
-
+        fun deleteCurrentUser(){
+           val temp =  sharedPrefs.edit()
+            temp.clear()
+            temp.apply()
+        }
         fun setCurrentUserData(userName: String, password: String, email: String) {
             val tempPrefs = sharedPrefs.edit()
 
