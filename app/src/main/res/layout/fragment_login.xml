@@ -28,19 +28,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="10dp" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelinebuttom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="703dp" />
-
     <TextView
         android:id="@+id/textViewLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:text="@string/LogIn"
+        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineTop"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
@@ -52,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:ems="10"
-
+        android:hint="Email..."
         app:layout_constraintEnd_toEndOf="@+id/textViewLogin"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="@+id/textViewLogin"
@@ -64,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
         android:ems="10"
-
+        android:hint="password..."
         app:layout_constraintEnd_toEndOf="@+id/editTextEmail"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextEmail"
