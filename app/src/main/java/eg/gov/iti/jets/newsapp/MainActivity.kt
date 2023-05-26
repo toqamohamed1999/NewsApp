@@ -17,19 +17,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        GlobalScope.launch {
-
-
-            val article =
-                Article(source = ArticleSource("1","source1"),
-                    author = "auther1",title = "title1", description = "desc1",url="url1",
-                urlToImage = "", publishedAt = "", content = "sdkpokfssvv")
-
-            val locale = ArticleLocalSource(applicationContext)
-            val res = locale.insertArticle(article)
-            println("######################## $res")
-        }
-
 
     }
 }
