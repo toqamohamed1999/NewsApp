@@ -52,9 +52,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    private fun hideSoftKeyBoard() {
-        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-    }
 
     private fun setUpNavBottom(navController: NavController) {
         navController.addOnDestinationChangedListener { _, navDestination, _ ->
