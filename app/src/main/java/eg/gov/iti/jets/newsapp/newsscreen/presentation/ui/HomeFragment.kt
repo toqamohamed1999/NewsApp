@@ -101,12 +101,7 @@ class HomeFragment : Fragment() {
                         complete.setThreshold(1)
 
                         complete.setOnItemClickListener { parent, view, position, id ->
-                           // println("filter title::: ${}")
-                          // var newList = articlesList.map { articlesList.get(position) }
-                          //  articleAdapter.submitList(newList)
                             binding.searchView.setQuery(filterTitle.get(position), true)
-                            Toast.makeText(context,parent.getItemIdAtPosition(position).toString(),Toast.LENGTH_LONG).show()
-
                         }
                         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                             override fun onQueryTextSubmit(query: String?): Boolean {
