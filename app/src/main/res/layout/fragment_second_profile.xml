@@ -83,7 +83,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/email"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginHorizontal="@dimen/_8sdp"
-                android:textSize="@dimen/_16ssp"
+                android:textSize="@dimen/_12ssp"
                 android:textColor="@color/black" />
 
 
@@ -96,7 +96,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/name"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginHorizontal="@dimen/_8sdp"
-                android:textSize="@dimen/_16ssp"
+                android:textSize="@dimen/_12ssp"
                 android:textColor="@color/black" />
 
             <com.google.android.material.button.MaterialButton
