@@ -17,8 +17,8 @@ class ArticleLocalSource () : ArticleLocalSourceI {
          return articleDao.getStoredArticles()
     }
 
-    override suspend fun insertArticle(article: Article): Long {
-        return articleDao.insertArticle(article)
+    override suspend fun insertArticles(articles: List<Article>):  List<Long> {
+        return articleDao.insertArticles(articles)
     }
 
     override suspend fun deleteArticle(article: Article): Int {

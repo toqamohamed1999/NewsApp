@@ -23,7 +23,8 @@ abstract class AppDataBase : RoomDatabase() {
             return instance ?: synchronized(this) {
 
                 instance =
-                    Room.databaseBuilder(context, AppDataBase::class.java, "appdatabase").build()
+                    Room.databaseBuilder(context, AppDataBase::class.java, "appdatabase")
+                        .fallbackToDestructiveMigration().build()
 
                 instance!!
             }
