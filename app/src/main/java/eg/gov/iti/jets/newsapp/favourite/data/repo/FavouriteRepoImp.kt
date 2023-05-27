@@ -30,4 +30,12 @@ class FavouriteRepoImp constructor(private val favLocalSourceInterface: FavLocal
     override suspend fun getAllFavourite(): Flow<List<FavouriteArticleModel>> {
         return favLocalSourceInterface.getAllFavourite()
     }
+
+    override suspend fun deleteFromFavorites(id: Int) {
+        favLocalSourceInterface.deleteFromFavorites(id)
+    }
+
+    override suspend fun isFavorite(id: Int): Int{
+      return   favLocalSourceInterface.isFavorite(id)
+    }
 }
