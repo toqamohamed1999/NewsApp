@@ -3,6 +3,8 @@ package eg.gov.iti.jets.newsapp.auth.signup.presentation.viewmodel
 import android.content.Context
 import android.util.Patterns
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import eg.gov.iti.jets.newsapp.BuildConfig
@@ -11,7 +13,9 @@ import eg.gov.iti.jets.newsapp.auth.domain.model.SignUpModel
 import eg.gov.iti.jets.newsapp.auth.domain.repo.AuthRepo
 import eg.gov.iti.jets.newsapp.base.local.sharedPrefs.SharedOperations
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
@@ -21,6 +25,10 @@ class SignUpViewModel(private val repo: AuthRepo) : ViewModel() {
     private val validationMutableStateFlow =
         MutableStateFlow<AuthState>(AuthState.BeforeValidation)
     val validationStateFlow: StateFlow<AuthState> = validationMutableStateFlow
+
+    private val errorMStateFow = MutableSharedFlow<Throwable>()
+    val errorStateFlow: SharedFlow<Throwable?> = errorMStateFow
+
 
     fun validateInputs(signUpModel: SignUpModel) {
         if (signUpModel.displayName.isEmpty()) {
@@ -43,14 +51,20 @@ class SignUpViewModel(private val repo: AuthRepo) : ViewModel() {
 
     private fun signUpUser(signUpModel: SignUpModel) {
         viewModelScope.launch(Dispatchers.IO) {
-            val response =
-                repo.signUpSignUpModel(key = BuildConfig.API_KEY, userModel = signUpModel)
-            saveUserData(
-                userName = response.displayName,
-                email = response.email,
-                token = response.refreshToken
-            )
-            validationMutableStateFlow.value = AuthState.onSuccess(R.string.success)
+            try {
+                val response =
+                    repo.signUpSignUpModel(key = BuildConfig.API_KEY, userModel = signUpModel)
+
+                saveUserData(
+                    userName = response.displayName,
+                    email = response.email,
+                    token = response.refreshToken
+                )
+                validationMutableStateFlow.value = AuthState.onSuccess(R.string.success)
+            } catch (e: Throwable) {
+                errorMStateFow.emit(e)
+            }
+
         }
     }
 
@@ -58,6 +72,8 @@ class SignUpViewModel(private val repo: AuthRepo) : ViewModel() {
     private fun saveUserData(userName: String, email: String, token: String) {
         SharedOperations.setCurrentUserData(userName = userName, email = email, token = token)
     }
+
+
 
     private fun isValidPassword(password: String?): Boolean {
         val regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20}$"
