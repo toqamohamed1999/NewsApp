@@ -1,10 +1,7 @@
 package eg.gov.iti.jets.newsapp.auth.login.presentation.ui
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,20 +10,17 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import eg.gov.iti.jets.newsapp.BuildConfig
 import eg.gov.iti.jets.newsapp.R
 import eg.gov.iti.jets.newsapp.auth.login.data.local.LoginRepoImpl
 import eg.gov.iti.jets.newsapp.auth.login.data.model.LoginModel
-import eg.gov.iti.jets.newsapp.auth.login.data.remote.LoginAPIInterface
 import eg.gov.iti.jets.newsapp.auth.login.data.remote.LoginResponseState
 import eg.gov.iti.jets.newsapp.auth.login.presentation.viewmodel.LoginViewModel
 import eg.gov.iti.jets.newsapp.auth.login.presentation.viewmodel.LoginViewModelFactory
 import eg.gov.iti.jets.newsapp.base.remote.APIClient
 import eg.gov.iti.jets.newsapp.databinding.FragmentLoginBinding
 import eg.gov.iti.jets.newsapp.util.Dialogs
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -58,7 +52,7 @@ class LoginFragment : Fragment() {
                         view.findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                     }
                     is LoginResponseState.Error ->{
-                        Dialogs.getAletDialogBuilder(requireContext(),"Login","Unsuccessful  Login").show()
+                        Dialogs.alertDialogBuilder(requireContext(),"Login","Unsuccessful  Login").show()
                     }
                     else ->{
                         Toast.makeText(requireContext(),"Loading",Toast.LENGTH_SHORT).show()
@@ -69,11 +63,11 @@ class LoginFragment : Fragment() {
         lifecycleScope.launch{
             viewModel.userExists.collect{
                 if (it)  {
-                    Dialogs.SnakeToast(view,"Login successful")
+//                    Dialogs.SnakeToast(view,"Login successful")
                     view.findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
                 else{
-                    Dialogs.SnakeToast(view,"Please Login First")
+//                    Dialogs.SnakeToast(view,"Please Login First")
                 }
             }
         }
