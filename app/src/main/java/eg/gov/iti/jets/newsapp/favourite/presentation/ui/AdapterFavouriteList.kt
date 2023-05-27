@@ -28,7 +28,7 @@ class AdapterFavouriteList (private var articalList: List<Article>) :
         this.articalList = value
 
     }
-    
+
     class ViewHolder(private val binding: RowFavouriteListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(article: Article) {
 
