@@ -6,7 +6,6 @@ import eg.gov.iti.jets.newsapp.auth.domain.model.User
 import eg.gov.iti.jets.newsapp.auth.signup.data.model.SignUpResponse
 
 interface AuthRepo {
-
     suspend fun signUpSignUpModel(
         key: String,
         userModel : SignUpModel
