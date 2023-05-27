@@ -27,7 +27,6 @@ class ProfileViewModel(private val repo: ProfileRepoInterface) : ViewModel() {
             userMSharedFlow.emit(user)
             Log.e("TAG1", user.userName)
             Log.e("TAG1", user.email)
-
         }
     }
 
