@@ -87,6 +87,9 @@ class LoginFragment : Fragment() {
                this.validEmail = true
            }
         }
+        binding.textViewgToSignUp.setOnClickListener{
+            view.findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
+        }
         binding.passwordEdiText.doAfterTextChanged {
             if(!viewModel.validatePassword(binding.passwordEdiText.text.toString()))
             {
