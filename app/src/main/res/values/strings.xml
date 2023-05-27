@@ -23,4 +23,5 @@
     <string name="title">Title</string>
     <string name="auther">auther</string>
     <string name="desc">description</string>
+    <string name="search">Search for article...</string>
 </resources>
