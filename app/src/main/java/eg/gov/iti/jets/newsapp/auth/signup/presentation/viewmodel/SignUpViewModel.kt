@@ -12,6 +12,7 @@ import eg.gov.iti.jets.newsapp.R
 import eg.gov.iti.jets.newsapp.auth.domain.model.SignUpModel
 import eg.gov.iti.jets.newsapp.auth.domain.repo.AuthRepo
 import eg.gov.iti.jets.newsapp.base.local.sharedPrefs.SharedOperations
+import eg.gov.iti.jets.newsapp.util.NetworkConnectivityObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,6 +46,7 @@ class SignUpViewModel(private val repo: AuthRepo) : ViewModel() {
             signUpUser(signUpModel)
         }
     }
+
 
     private fun validateEmail(signUpModel: SignUpModel) =
         !Patterns.EMAIL_ADDRESS.matcher(signUpModel.email).matches()

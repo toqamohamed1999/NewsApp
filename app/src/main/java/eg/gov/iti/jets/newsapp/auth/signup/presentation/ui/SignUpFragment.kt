@@ -20,6 +20,7 @@ import eg.gov.iti.jets.newsapp.auth.signup.presentation.viewmodel.SignUpViewMode
 import eg.gov.iti.jets.newsapp.base.remote.APIClient
 import eg.gov.iti.jets.newsapp.base.remote.AppRetrofit
 import eg.gov.iti.jets.newsapp.databinding.FragmentSignUpBinding
+import eg.gov.iti.jets.newsapp.util.NetworkConnectivityObserver
 
 
 class SignUpFragment : Fragment() {
@@ -59,15 +60,24 @@ class SignUpFragment : Fragment() {
             val password = binding?.passwordEditText?.text.toString().trim()
             signUpModel =
                 SignUpModel(email = email, password = password, displayName = userName)
-            binding?.progressBar?.visibility = View.VISIBLE
-            signUpViewModel.validateInputs(signUpModel)
-            observeData()
-            observeErrorMessage()
-
-
+            if (checkNetwork()) {
+                binding?.progressBar?.visibility = View.VISIBLE
+                signUpViewModel.validateInputs(signUpModel)
+                observeData()
+                observeErrorMessage()
+            } else {
+                Toast.makeText(
+                    requireActivity().applicationContext,
+                    getString(R.string.no_internet),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
+    private fun checkNetwork(): Boolean {
+        return NetworkConnectivityObserver.isOnline(requireActivity().applicationContext)
+    }
 
     private fun observeData() {
         lifecycleScope.launchWhenCreated {
