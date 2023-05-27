@@ -27,11 +27,11 @@ class SharedOperations private constructor() {
             temp.clear()
             temp.apply()
         }
-        fun setCurrentUserData(userName: String, password: String, email: String) {
+        fun setCurrentUserData(userName: String, token: String, email: String) {
+            deleteCurrentUser()
             val tempPrefs = sharedPrefs.edit()
-
             tempPrefs.putString("userName", userName)
-            tempPrefs.putString("password", password)
+            tempPrefs.putString("token", token)
             tempPrefs.putString("email", email)
             tempPrefs.apply()
         }
@@ -39,7 +39,7 @@ class SharedOperations private constructor() {
         fun getCurrentUserData(): Triple<String?, String?, String?> {
             return Triple(
                 sharedPrefs.getString("userName", ""),
-                sharedPrefs.getString("password", ""),
+                sharedPrefs.getString("token", ""),
                 sharedPrefs.getString("email", "")
             )
         }

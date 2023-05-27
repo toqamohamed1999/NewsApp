@@ -32,12 +32,12 @@ class LoginViewModel(private val loginRepo:LoginRepoImpl): ViewModel() {
     }
     fun checkUserInSharedPrefs(): Flow<LoginModel> {
        val it = SharedOperations.getCurrentUserData()
-        Log.e("",it.third.toString())
+        Log.e("",it.third.toString() + it.second+it.first)
         return flow{
             emit(LoginModel(it.third.toString(),it.second.toString(),true))
         }
     }
-    fun saveUserDataToSharedPrefs(response:LoginResponse)
+    fun saveUserDataToSharedPrefs(response: LoginResponse)
     {
         SharedOperations.setCurrentUserData(response.displayName,response.idToken,response.email)
     }
@@ -45,6 +45,6 @@ class LoginViewModel(private val loginRepo:LoginRepoImpl): ViewModel() {
         return  Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
     fun validatePassword(password:String):Boolean{
-       return password.count() >= 9
+       return password.count() >= 8
     }
 }
