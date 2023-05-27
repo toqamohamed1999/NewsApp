@@ -38,15 +38,17 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/articles_recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="411dp"
+        android:layout_height="621dp"
+        android:layout_marginTop="7dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="@dimen/_90sdp"
-        tools:listitem="@layout/article_item"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_view" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/article_item" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -58,5 +60,15 @@
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone"
         />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView"
+        android:layout_width="409dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import eg.gov.iti.jets.newsapp.newsscreen.data.model.NewsResultState
+import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
 import eg.gov.iti.jets.newsapp.newsscreen.domain.repo.NewsRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,6 +44,32 @@ class HomeViewModel (private val newsRepo: NewsRepo): ViewModel() {
             }
         }
     }
+
+    fun searchArticles(articles: List<Article>, query: String): List<Article> {
+        val filteredArticles = mutableListOf<Article>()
+        for (article in articles) {
+            if (article.title.contains(query, true)) {
+                filteredArticles.add(article)
+            }
+        }
+        if(filteredArticles.isEmpty()){
+            println("NOTFounddd!!!!!!!!!!")
+        }else
+        println("filteredArticles[0]............ ${filteredArticles[0]}")
+        return filteredArticles
+
+    }
+
+    fun getTitleArtical(articles: List<Article>): List<String> {
+        var filteredTitleArticles = mutableListOf<String>()
+        for (i in 0..articles.size-1) {
+            var stringTitle = articles[i].title
+            filteredTitleArticles.add(stringTitle)
+        }
+        return filteredTitleArticles
+    }
+
+
 }
 
 class HomeViewModelFactory(private val repo: NewsRepo) : ViewModelProvider.Factory {

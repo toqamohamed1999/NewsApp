@@ -1,12 +1,15 @@
 package eg.gov.iti.jets.newsapp.newsscreen.presentation.ui
 
-import android.opengl.Visibility
+import android.R
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.SearchView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -82,6 +85,42 @@ class HomeFragment : Fragment() {
                         articleAdapter.submitList(articlesList)
                         Log.i(TAG, "observeNewsData: "+it.articleList)
                         binding.progressBar.visibility = View.GONE
+
+                        var filterTitle = viewModel.getTitleArtical(articlesList)
+                        var complete = binding.autoCompleteTextView
+                        var completeAdapter = ArrayAdapter<String>(
+                            requireContext(),
+                            R.layout.simple_dropdown_item_1line, filterTitle
+                        )
+                        complete.setAdapter(completeAdapter)
+                        complete.setThreshold(1)
+
+                        complete.setOnItemClickListener { parent, view, position, id ->
+                           // println("filter title::: ${}")
+                          // var newList = articlesList.map { articlesList.get(position) }
+                          //  articleAdapter.submitList(newList)
+                            binding.searchView.setQuery(filterTitle.get(position), true)
+                            Toast.makeText(context,parent.getItemIdAtPosition(position).toString(),Toast.LENGTH_LONG).show()
+
+                        }
+                        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                            override fun onQueryTextSubmit(query: String?): Boolean {
+                                val filterArticalList = viewModel.searchArticles(articlesList,query ?: "")
+                                articleAdapter.submitList(filterArticalList)
+                                return false
+                            }
+
+                            override fun onQueryTextChange(newText: String?): Boolean {
+                                newText?.let {
+                                    val filterArticalList = viewModel.searchArticles(articlesList,it)
+                                    articleAdapter.submitList(filterArticalList)
+                                    var filterTitle = viewModel.getTitleArtical(articlesList)
+                                }
+                                return true
+                            }
+                        })
+
+
                     }
                     else -> {
                         binding.progressBar.visibility = View.GONE
