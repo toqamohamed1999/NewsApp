@@ -114,7 +114,6 @@ class HomeFragment : Fragment() {
                                 newText?.let {
                                     val filterArticalList = viewModel.searchArticles(articlesList,it)
                                     articleAdapter.submitList(filterArticalList)
-                                    var filterTitle = viewModel.getTitleArtical(articlesList)
                                 }
                                 return true
                             }

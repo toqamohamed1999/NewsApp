@@ -44,12 +44,7 @@ class HomeViewModel(private val newsRepo: NewsRepo) : ViewModel() {
                 filteredArticles.add(article)
             }
         }
-        if(filteredArticles.isEmpty()){
-            println("NOTFounddd!!!!!!!!!!")
-        }else
-        println("filteredArticles[0]............ ${filteredArticles[0]}")
         return filteredArticles
-
     }
 
     fun getTitleArtical(articles: List<Article>): List<String> {
