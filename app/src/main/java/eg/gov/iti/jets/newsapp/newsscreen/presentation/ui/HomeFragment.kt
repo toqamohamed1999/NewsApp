@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by lazy {
 
         val factory = HomeViewModelFactory(
-            RepoImpl.getInstance(ArticleRemoteSource(), ArticleLocalSource(requireContext()))!!
+            RepoImpl.getInstance(ArticleRemoteSource(), ArticleLocalSource())!!
         )
 
         ViewModelProvider(this, factory)[HomeViewModel::class.java]
@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
                     is NewsResultState.Success -> {
                         articlesList = it.articleList
                         articleAdapter.submitList(articlesList)
-                        Log.i(TAG, "observeNewsData: "+it.articleList)
+                        Log.i(TAG, "observeNewsData: " + it.articleList)
                         binding.progressBar.visibility = View.GONE
                     }
                     else -> {
