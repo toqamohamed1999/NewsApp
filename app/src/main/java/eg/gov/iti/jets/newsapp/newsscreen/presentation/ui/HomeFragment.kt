@@ -1,15 +1,17 @@
 package eg.gov.iti.jets.newsapp.newsscreen.presentation.ui
 
-import android.opengl.Visibility
+import android.R
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.facebook.shimmer.ShimmerFrameLayout
 import eg.gov.iti.jets.newsapp.databinding.FragmentHomeBinding
 import eg.gov.iti.jets.newsapp.newsscreen.data.local.ArticleLocalSource
 import eg.gov.iti.jets.newsapp.newsscreen.data.model.NewsResultState
@@ -29,7 +31,6 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var articleAdapter: ArticleAdapter
     private var articlesList: List<Article> = ArrayList()
-
 
     private val viewModel: HomeViewModel by lazy {
 
@@ -75,16 +76,19 @@ class HomeFragment : Fragment() {
             viewModel.newsState.collectLatest {
                 when (it) {
                     is NewsResultState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        binding.articlesRecyclerView.visibility = View.GONE
+                        binding.shimmerViewContainer.visibility = View.VISIBLE
+                        binding.shimmerViewContainer.startShimmer()
                     }
                     is NewsResultState.Success -> {
+                        binding.articlesRecyclerView.visibility = View.VISIBLE
+                        binding.shimmerViewContainer.visibility = View.GONE
                         articlesList = it.articleList
                         articleAdapter.submitList(articlesList)
-                        Log.i(TAG, "observeNewsData: " + it.articleList)
-                        binding.progressBar.visibility = View.GONE
                     }
                     else -> {
-                        binding.progressBar.visibility = View.GONE
+                        binding.shimmerViewContainer.visibility = View.VISIBLE
+                        binding.articlesRecyclerView.visibility = View.GONE
                         Log.i(TAG, "getNewsDataFromApi: $it")
                     }
                 }

@@ -6,7 +6,7 @@ import eg.gov.iti.jets.newsapp.favourite.domain.model.FavouriteArticleModel
 import eg.gov.iti.jets.newsapp.favourite.domain.repo.FavRepoInterface
 import kotlinx.coroutines.flow.Flow
 
-class FavouriteRepoImp private constructor(val favLocalSourceInterface: FavLocalSourceInterface) :
+class FavouriteRepoImp constructor(private val favLocalSourceInterface: FavLocalSourceInterface) :
     FavRepoInterface {
 
     companion object {

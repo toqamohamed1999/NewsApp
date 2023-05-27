@@ -6,7 +6,7 @@ import eg.gov.iti.jets.newsapp.favourite.domain.model.FavouriteArticleModel
 import kotlinx.coroutines.flow.Flow
 
 
-class FavLocalSourceImp private constructor(): FavLocalSourceInterface {
+class FavLocalSourceImp constructor(): FavLocalSourceInterface {
     companion object {
         @Volatile
         private var favLocalSourceInstance : FavLocalSourceInterface?= null

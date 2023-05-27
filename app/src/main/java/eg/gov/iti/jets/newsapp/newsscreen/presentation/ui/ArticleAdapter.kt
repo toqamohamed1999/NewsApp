@@ -26,16 +26,19 @@ class ArticleAdapter : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(Ar
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val article = getItem(position)
 
+        bind(holder, article)
+    }
+
+    private fun bind(holder: ArticleViewHolder, article: Article) {
         Picasso.get().load(article.urlToImage)
-            .placeholder(R.drawable.ic_launcher_foreground)
+            .placeholder(R.drawable.article)
             .resize(200, 200)
             .into(holder.binding.image)
         holder.binding.titleTextview.text = article.title
-        if(article.author.isNullOrEmpty()) holder.binding.autherTextview.visibility = View.GONE
+        if (article.author.isNullOrEmpty()) holder.binding.autherTextview.visibility = View.GONE
         else holder.binding.autherTextview.text = article.author
         holder.binding.descriptionTextview.text = article.description
         holder.binding.publishedAtTextview.text = article.publishedAt
-
     }
 
     inner class ArticleViewHolder(var binding: ArticleItemBinding) :
