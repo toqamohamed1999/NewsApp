@@ -22,8 +22,4 @@ object APIClient{
     val loginAPIService : LoginAPIInterface by lazy {
         AppRetrofit.retrofit.create(LoginAPIInterface::class.java)
     }
-
-    val newsAPIInterface : NewsAPIInterface by lazy {
-        AppRetrofit.retrofit.create(NewsAPIInterface::class.java)
-    }
 }

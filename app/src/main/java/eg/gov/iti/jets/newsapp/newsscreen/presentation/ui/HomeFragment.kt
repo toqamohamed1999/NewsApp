@@ -1,5 +1,6 @@
 package eg.gov.iti.jets.newsapp.newsscreen.presentation.ui
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -22,18 +23,18 @@ import kotlinx.coroutines.launch
 
 
 class HomeFragment : Fragment() {
-    private  val TAG = "HomeFragment"
+    private val TAG = "HomeFragment"
 
-    private var _binding : FragmentHomeBinding? = null
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var articleAdapter : ArticleAdapter
-    private var articlesList : List<Article> = ArrayList()
+    private lateinit var articleAdapter: ArticleAdapter
+    private var articlesList: List<Article> = ArrayList()
 
 
     private val viewModel: HomeViewModel by lazy {
 
         val factory = HomeViewModelFactory(
-            RepoImpl.getInstance(ArticleRemoteSource(),ArticleLocalSource(requireContext()))!!
+            RepoImpl.getInstance(ArticleRemoteSource(), ArticleLocalSource(requireContext()))!!
         )
 
         ViewModelProvider(this, factory)[HomeViewModel::class.java]
@@ -41,9 +42,6 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
     }
 
     override fun onCreateView(
@@ -77,13 +75,16 @@ class HomeFragment : Fragment() {
             viewModel.newsState.collectLatest {
                 when (it) {
                     is NewsResultState.Loading -> {
-
+                        binding.progressBar.visibility = View.VISIBLE
                     }
                     is NewsResultState.Success -> {
                         articlesList = it.articleList
                         articleAdapter.submitList(articlesList)
+                        Log.i(TAG, "observeNewsData: "+it.articleList)
+                        binding.progressBar.visibility = View.GONE
                     }
                     else -> {
+                        binding.progressBar.visibility = View.GONE
                         Log.i(TAG, "getNewsDataFromApi: $it")
                     }
                 }
@@ -92,13 +93,10 @@ class HomeFragment : Fragment() {
     }
 
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
 
 
 }

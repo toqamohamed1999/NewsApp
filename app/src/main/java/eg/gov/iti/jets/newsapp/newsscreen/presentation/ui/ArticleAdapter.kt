@@ -2,6 +2,7 @@ package eg.gov.iti.jets.newsapp.newsscreen.presentation.ui
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -25,12 +26,13 @@ class ArticleAdapter : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(Ar
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         val article = getItem(position)
 
-        Picasso.get().load(article.url)
+        Picasso.get().load(article.urlToImage)
             .placeholder(R.drawable.ic_launcher_foreground)
             .resize(200, 200)
             .into(holder.binding.image)
         holder.binding.titleTextview.text = article.title
-        holder.binding.autherTextview.text = article.author
+        if(article.author.isNullOrEmpty()) holder.binding.autherTextview.visibility = View.GONE
+        else holder.binding.autherTextview.text = article.author
         holder.binding.descriptionTextview.text = article.description
         holder.binding.publishedAtTextview.text = article.publishedAt
 
