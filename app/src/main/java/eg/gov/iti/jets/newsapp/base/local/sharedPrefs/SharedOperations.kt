@@ -2,6 +2,7 @@ package eg.gov.iti.jets.newsapp.base.local.sharedPrefs
 
 import android.content.Context
 import android.content.SharedPreferences
+import eg.gov.iti.jets.newsapp.util.Constants
 
 class SharedOperations private constructor() {
 
@@ -30,20 +31,20 @@ class SharedOperations private constructor() {
             temp.apply()
         }
 
-        fun setCurrentUserData(userName: String, password: String, email: String) {
+        fun setCurrentUserData(userName: String, token: String, email: String) {
             val tempPrefs = sharedPrefs.edit()
 
-            tempPrefs.putString("userName", userName)
-            tempPrefs.putString("password", password)
-            tempPrefs.putString("email", email)
+            tempPrefs.putString(Constants.USER_NAME, userName)
+            tempPrefs.putString(Constants.TOKEN, token)
+            tempPrefs.putString(Constants.EMAIL, email)
             tempPrefs.apply()
         }
 
         fun getCurrentUserData(): Triple<String?, String?, String?> {
             return Triple(
-                sharedPrefs.getString("userName", ""),
-                sharedPrefs.getString("password", ""),
-                sharedPrefs.getString("email", "")
+                sharedPrefs.getString(Constants.USER_NAME, ""),
+                sharedPrefs.getString(Constants.TOKEN, ""),
+                sharedPrefs.getString(Constants.EMAIL, "")
             )
         }
     }
