@@ -20,20 +20,14 @@ class SharedOperations private constructor() {
                 )
         }
 
-        fun getInstance(): SharedPreferences {
-            return context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE)
-        }
-
-
-        fun deleteCurrentUser() {
+        fun deleteCurrentUser(): Boolean {
             val temp = sharedPrefs.edit()
             temp.clear()
-            temp.apply()
+            return temp.commit()
         }
 
         fun setCurrentUserData(userName: String, token: String, email: String) {
             val tempPrefs = sharedPrefs.edit()
-
             tempPrefs.putString(Constants.USER_NAME, userName)
             tempPrefs.putString(Constants.TOKEN, token)
             tempPrefs.putString(Constants.EMAIL, email)
