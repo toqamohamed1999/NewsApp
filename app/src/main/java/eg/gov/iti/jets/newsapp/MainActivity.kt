@@ -29,8 +29,6 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(bottomNavigation, navController)
         setUpNavBottom(navController)
 
-        navController.navigate(R.id.homeFragment)
-
     }
 
     private fun setUpNavBottom(navController: NavController) {
