@@ -6,10 +6,10 @@ import eg.gov.iti.jets.newsapp.newsscreen.domain.local.ArticleLocalSourceI
 import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
 import kotlinx.coroutines.flow.Flow
 
-class ArticleLocalSource (context: Context) : ArticleLocalSourceI {
+class ArticleLocalSource () : ArticleLocalSourceI {
 
     private val articleDao : ArticleDao by lazy{
-        AppDataBase.getInstance(context)
+        AppDataBase.getInstance()
             .getArticleDao()
     }
 

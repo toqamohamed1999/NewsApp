@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by lazy {
 
         val factory = HomeViewModelFactory(
-            RepoImpl.getInstance(ArticleRemoteSource(), ArticleLocalSource(requireContext()))!!
+            RepoImpl.getInstance(ArticleRemoteSource(), ArticleLocalSource())!!
         )
 
         ViewModelProvider(this, factory)[HomeViewModel::class.java]
