@@ -7,4 +7,6 @@ interface FavRepoInterface {
 
     suspend fun insertArticleToFav(favArticle: FavouriteArticleModel)
     suspend fun getAllFavourite() : Flow<List<FavouriteArticleModel>>
+    suspend fun  deleteFromFavorites(id:Int)
+    suspend fun isFavorite(id:Int):Int
 }

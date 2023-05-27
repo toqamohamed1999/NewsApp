@@ -25,4 +25,12 @@ class FavLocalSourceImp constructor(): FavLocalSourceInterface {
     override suspend fun insertFavouriteArticle(favArticle: FavouriteArticleModel) {
         return AppDataBase.getInstance().getFavouriteDao().insertFavouriteArticle(favArticle)
     }
+
+    override suspend fun deleteFromFavorites(id: Int) {
+         AppDataBase.getInstance().getFavouriteDao().deleteFromFavorites(id)
+    }
+
+    override suspend fun isFavorite(id: Int):Int {
+       return AppDataBase.getInstance().getFavouriteDao().isFavorite(id)
+    }
 }
