@@ -1,6 +1,10 @@
 package eg.gov.iti.jets.newsapp.newsdetails.domain.repo
 
-interface NewsDetailsRepo {
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
+interface NewsDetailsRepo {
 
 }

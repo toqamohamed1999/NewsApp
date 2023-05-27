@@ -6,5 +6,4 @@ import eg.gov.iti.jets.newsapp.newsdetails.domain.repo.NewsDetailsRepo
 class NewsDetailsViewModel (private  val newsDetailsNewsRepo: NewsDetailsRepo) : ViewModel() {
 
 
-
 }
