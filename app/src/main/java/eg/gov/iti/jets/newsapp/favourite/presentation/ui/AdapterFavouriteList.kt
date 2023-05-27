@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import eg.gov.iti.jets.newsapp.databinding.FragmentFavouriteListBinding
 import eg.gov.iti.jets.newsapp.databinding.RowFavouriteListBinding
+import eg.gov.iti.jets.newsapp.favourite.domain.model.FavouriteArticleModel
 import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
 
-class AdapterFavouriteList (private var articalList: List<Article>) :
+class AdapterFavouriteList (private var articlesList: List<FavouriteArticleModel>) :
     RecyclerView.Adapter<AdapterFavouriteList.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -19,19 +20,19 @@ class AdapterFavouriteList (private var articalList: List<Article>) :
         return ViewHolder(RowFavouriteListBinding.inflate(inflater, parent, false))
     }
 
-    override fun getItemCount(): Int =articalList.size
+    override fun getItemCount(): Int = articlesList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(articalList[position])
+        holder.bind(articlesList[position])
     }
 
-    fun setData(value: List<Article>){
-        this.articalList = value
+    fun setData(value: List<FavouriteArticleModel>){
+        this.articlesList = value
 
     }
 
     class ViewHolder(private val binding: RowFavouriteListBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(article: Article) {
+        fun bind(article: FavouriteArticleModel) {
 
             binding.titleFavouriteTextview.text = article.title
 
