@@ -1,8 +1,8 @@
-package eg.gov.iti.jets.newsapp.newsscreen.domain.data
+package eg.gov.iti.jets.newsapp.newsscreen.data.repo
 
 import eg.gov.iti.jets.newsapp.newsscreen.domain.model.NewsModel
 import eg.gov.iti.jets.newsapp.newsscreen.domain.remote.NewsAPIInterface
-import eg.gov.iti.jets.newsapp.newsscreen.domain.remote.NewsRepo
+import eg.gov.iti.jets.newsapp.newsscreen.domain.repo.NewsRepo
 
 class RepoImpl (private val newsAPIInterface : NewsAPIInterface) : NewsRepo {
     override suspend fun getNews(country: String): NewsModel {

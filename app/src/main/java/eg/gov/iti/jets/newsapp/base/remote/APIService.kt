@@ -1,6 +1,7 @@
 package eg.gov.iti.jets.newsapp.base.remote
 
 import eg.gov.iti.jets.newsapp.auth.login.data.remote.LoginAPIInterface
+import eg.gov.iti.jets.newsapp.newsscreen.domain.remote.NewsAPIInterface
 import eg.gov.iti.jets.newsapp.util.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,5 +21,9 @@ object APIClient{
     }
     val loginAPIService : LoginAPIInterface by lazy {
         AppRetrofit.retrofit.create(LoginAPIInterface::class.java)
+    }
+
+    val newsAPIInterface : NewsAPIInterface by lazy {
+        AppRetrofit.retrofit.create(NewsAPIInterface::class.java)
     }
 }
