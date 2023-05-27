@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import eg.gov.iti.jets.newsapp.databinding.FragmentFavouriteListBinding
 import eg.gov.iti.jets.newsapp.databinding.RowFavouriteListBinding
 import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
@@ -32,6 +33,14 @@ class AdapterFavouriteList (private var articalList: List<Article>) :
     class ViewHolder(private val binding: RowFavouriteListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(article: Article) {
 
+            binding.titleFavouriteTextview.text = article.title
+
+            Picasso.get().load(article.urlToImage)
+                .into(binding.imageFavourite)
+
+            binding.deleteFavouritImage.setOnClickListener{
+
+            }
         }
     }
 }
