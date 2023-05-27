@@ -23,8 +23,10 @@ class HomeViewModel (private val newsRepo: NewsRepo): ViewModel() {
     private fun getNews() {
         viewModelScope.launch {
             try {
-                 newsRepo.getNews().collect{
-                    _newsState.value = NewsResultState.Success(it.articles)
+                newsRepo.getNews().collect {
+                    _newsState.value = NewsResultState.Success(it)
+                    newsRepo.deleteAllArticles()
+                    newsRepo.insertArticles(it)
                 }
             } catch (e: java.lang.Exception) {
                 _newsState.value = NewsResultState.Error()
@@ -32,17 +34,6 @@ class HomeViewModel (private val newsRepo: NewsRepo): ViewModel() {
         }
     }
 
-    private fun getStoredNews() {
-        viewModelScope.launch {
-            try {
-                newsRepo.getStoredNews().collect{
-                    _newsState.value = NewsResultState.Success(it)
-                }
-            } catch (e: java.lang.Exception) {
-                _newsState.value = NewsResultState.Error()
-            }
-        }
-    }
 }
 
 class HomeViewModelFactory(private val repo: NewsRepo) : ViewModelProvider.Factory {

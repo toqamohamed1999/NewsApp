@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
                     is NewsResultState.Success -> {
                         articlesList = it.articleList
                         articleAdapter.submitList(articlesList)
-                        Log.i(TAG, "observeNewsData: "+it.articleList)
+                        Log.i(TAG, "observeNewsData: " + it.articleList)
                         binding.progressBar.visibility = View.GONE
                     }
                     else -> {

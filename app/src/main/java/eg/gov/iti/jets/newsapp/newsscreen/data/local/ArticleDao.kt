@@ -12,7 +12,7 @@ interface ArticleDao {
     fun getStoredArticles (): Flow<List<Article>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertArticle(article : Article): Long
+    suspend fun insertArticles(articles : List<Article>) : List<Long>
 
     @Delete
     suspend fun deleteArticle(article : Article): Int

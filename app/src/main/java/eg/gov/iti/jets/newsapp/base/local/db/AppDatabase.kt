@@ -8,7 +8,7 @@ import eg.gov.iti.jets.newsapp.newsscreen.data.local.ArticleDao
 import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
 
 
-@Database(entities = [Article::class], version = 1)
+@Database(entities = [Article::class], version = 6)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun getArticleDao() :ArticleDao
 
@@ -19,7 +19,8 @@ abstract class AppDataBase : RoomDatabase() {
         fun getInstance(context : Context):AppDataBase{
             return instance ?: synchronized(this){
 
-                instance = Room.databaseBuilder(context,AppDataBase::class.java,"appdatabase").build()
+                instance = Room.databaseBuilder(context,AppDataBase::class.java,"appdatabase")
+                    .fallbackToDestructiveMigration().build()
 
                 instance!!
             }
