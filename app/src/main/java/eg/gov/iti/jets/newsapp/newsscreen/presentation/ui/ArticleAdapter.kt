@@ -1,9 +1,12 @@
 package eg.gov.iti.jets.newsapp.newsscreen.presentation.ui
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -15,6 +18,8 @@ import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
 class ArticleAdapter : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(ArticleDiffUtil()) {
 
     private lateinit var binding: ArticleItemBinding
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val inflater =
@@ -35,7 +40,11 @@ class ArticleAdapter : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(Ar
         else holder.binding.autherTextview.text = article.author
         holder.binding.descriptionTextview.text = article.description
         holder.binding.publishedAtTextview.text = article.publishedAt
+        holder.binding.favCardView.setOnClickListener{
 
+            holder.binding.root.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToNewsDetailsFragment(article)
+            )
+        }
     }
 
     inner class ArticleViewHolder(var binding: ArticleItemBinding) :

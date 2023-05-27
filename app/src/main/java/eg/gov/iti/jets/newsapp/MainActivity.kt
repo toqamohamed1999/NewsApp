@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation = findViewById(R.id.bottomNavigationView)
         NavigationUI.setupWithNavController(bottomNavigation, navController)
         setUpNavBottom(navController)
-
         navController.navigate(R.id.homeFragment)
 
     }
