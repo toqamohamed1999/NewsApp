@@ -32,7 +32,7 @@ class ArticleAdapter : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(Ar
         val article = getItem(position)
 
         Picasso.get().load(article.urlToImage)
-            .placeholder(R.drawable.ic_launcher_foreground)
+            .placeholder(R.drawable.article)
             .resize(200, 200)
             .into(holder.binding.image)
         holder.binding.titleTextview.text = article.title
