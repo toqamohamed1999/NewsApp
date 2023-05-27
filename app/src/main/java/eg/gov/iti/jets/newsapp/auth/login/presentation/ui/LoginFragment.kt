@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import eg.gov.iti.jets.newsapp.BuildConfig
 import eg.gov.iti.jets.newsapp.R
 import eg.gov.iti.jets.newsapp.auth.login.data.local.LoginRepoImpl
@@ -49,19 +51,11 @@ class LoginFragment : Fragment() {
                 viewModel = ViewModelProvider(this,factory)[LoginViewModel::class.java]
 
         lifecycleScope.launch {
-            viewModel.checkUserInSharedPrefs().collect{
-                if(it.email.isEmpty()){
-                    Toast.makeText(requireContext(),"Failed to login",Toast.LENGTH_SHORT).show()
-                }else{
-                    viewModel.login(BuildConfig.API_KEY, LoginModel(it.email,it.password,true))
-                }
-            }
             viewModel.loginState.collect {
                 when(it){
                     is LoginResponseState.Success ->{
-                        Log.e("",it.response.registered.toString())
-                        Toast.makeText(requireContext(),"Go to main",Toast.LENGTH_SHORT).show()
                         viewModel.saveUserDataToSharedPrefs(it.response)
+                        view.findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                     }
                     is LoginResponseState.Error ->{
                         Dialogs.getAletDialogBuilder(requireContext(),"Login","Unsuccessful  Login").show()
@@ -69,6 +63,17 @@ class LoginFragment : Fragment() {
                     else ->{
                         Toast.makeText(requireContext(),"Loading",Toast.LENGTH_SHORT).show()
                     }
+                }
+            }
+        }
+        lifecycleScope.launch{
+            viewModel.userExists.collect{
+                if (it)  {
+                    Dialogs.SnakeToast(view,"Login successful")
+                    view.findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                }
+                else{
+                    Dialogs.SnakeToast(view,"Please Login First")
                 }
             }
         }

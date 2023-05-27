@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import eg.gov.iti.jets.newsapp.auth.login.data.local.LoginRepoImpl
 import eg.gov.iti.jets.newsapp.auth.login.data.model.LoginModel
 import eg.gov.iti.jets.newsapp.auth.login.data.model.LoginResponse
+import eg.gov.iti.jets.newsapp.auth.login.data.remote.LoginAPIInterface
 import eg.gov.iti.jets.newsapp.auth.login.data.remote.LoginResponseState
 import eg.gov.iti.jets.newsapp.base.local.sharedPrefs.SharedOperations
 import kotlinx.coroutines.flow.Flow
@@ -15,12 +16,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import java.lang.Thread.State
 
-class LoginViewModel(private val loginRepo:LoginRepoImpl): ViewModel() {
+class LoginViewModel(private val loginRepo:LoginAPIInterface): ViewModel() {
 
     private  var _loginState:MutableStateFlow<LoginResponseState> = MutableStateFlow(LoginResponseState.Loading())
     var loginState:StateFlow<LoginResponseState> = _loginState
-
+    private var _userExists:MutableStateFlow<Boolean> = MutableStateFlow(false)
+    var userExists :StateFlow<Boolean> = _userExists
+    init {
+        checkUserInSharedPrefs()
+    }
     fun login(key:String,body:LoginModel){
         viewModelScope.launch {
          try {
@@ -30,12 +36,9 @@ class LoginViewModel(private val loginRepo:LoginRepoImpl): ViewModel() {
          }
         }
     }
-    fun checkUserInSharedPrefs(): Flow<LoginModel> {
-       val it = SharedOperations.getCurrentUserData()
-        Log.e("",it.third.toString() + it.second+it.first)
-        return flow{
-            emit(LoginModel(it.third.toString(),it.second.toString(),true))
-        }
+   private fun checkUserInSharedPrefs() {
+       val userData = SharedOperations.getCurrentUserData()
+        _userExists.value = !userData.second.isNullOrBlank()
     }
     fun saveUserDataToSharedPrefs(response: LoginResponse)
     {
