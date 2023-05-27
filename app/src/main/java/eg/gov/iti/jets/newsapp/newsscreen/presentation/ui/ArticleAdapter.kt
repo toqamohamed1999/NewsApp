@@ -42,7 +42,8 @@ class ArticleAdapter : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(Ar
         holder.binding.publishedAtTextview.text = article.publishedAt
         holder.binding.favCardView.setOnClickListener{
 
-            holder.binding.root.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToNewsDetailsFragment(article)
+            holder.binding.root.findNavController()
+                .navigate(HomeFragmentDirections.actionHomeFragmentToNewsDetailsFragment(article)
             )
         }
     }

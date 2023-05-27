@@ -35,16 +35,14 @@ class FavouriteListFragment : Fragment() {
     private  val TAG = "FavouriteListFragment"
 
     private var _binding: FragmentFavouriteListBinding? = null
-    private val binding get() = _binding!!
     private var favArticleList: List<FavouriteArticleModel> = ArrayList()
     private lateinit var favAdapter : AdapterFavouriteList
 
     private val viewModel: FavouriteViewModel by lazy {
 
         val factory = FavViewModelFactory(
-            FavouriteRepoImp(FavLocalSourceImp())!!
+            FavouriteRepoImp(FavLocalSourceImp())
         )
-
         ViewModelProvider(this, factory)[FavouriteViewModel::class.java]
     }
 
@@ -55,10 +53,10 @@ class FavouriteListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
 
         _binding = FragmentFavouriteListBinding.inflate(inflater, container, false)
-        return binding.root
+        return _binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,7 +69,7 @@ class FavouriteListFragment : Fragment() {
     private fun setUpFavRecyclerView() {
         favAdapter = AdapterFavouriteList(favArticleList)
 
-        binding.favouriteListRecyclerView.apply {
+        _binding?.favouriteListRecyclerView?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = favAdapter
         }
@@ -83,15 +81,15 @@ class FavouriteListFragment : Fragment() {
             viewModel.favState.collectLatest {
                 when (it) {
                     is FavResultState.Loading -> {
-                        binding.progressBar.visibility = View.GONE
+                        _binding?.progressBar?.visibility = View.VISIBLE
                     }
                     is FavResultState.Success -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        _binding?.progressBar?.visibility = View.GONE
                         favArticleList = it.articleList
                         favAdapter.setData(favArticleList)
                     }
                     else -> {
-                        binding.progressBar.visibility = View.GONE
+                        _binding?.progressBar?.visibility = View.GONE
                         Log.i(TAG, "getFavDataFromDatabase: $it")
                     }
                 }
@@ -99,9 +97,6 @@ class FavouriteListFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+
 
 }

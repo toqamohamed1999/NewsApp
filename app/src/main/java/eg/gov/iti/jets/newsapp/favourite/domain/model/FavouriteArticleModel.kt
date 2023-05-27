@@ -8,7 +8,7 @@ import eg.gov.iti.jets.newsapp.util.Constants
 
 
 @Entity(tableName = Constants.FAVOURITE_TABLE_NAME)
-data class FavouriteArticleModel( @Embedded val source: ArticleSource,
+data class FavouriteArticleModel(
                              val author: String,
                              val title: String,
                              val description: String,
@@ -16,5 +16,5 @@ data class FavouriteArticleModel( @Embedded val source: ArticleSource,
                              val urlToImage: String,
                              val publishedAt: String,
                              val content: String,
-                             @PrimaryKey val articleId: Int = content.hashCode())
+                             @PrimaryKey val articleId: Int)
 
