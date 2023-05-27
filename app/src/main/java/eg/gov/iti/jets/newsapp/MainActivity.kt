@@ -3,7 +3,6 @@ package eg.gov.iti.jets.newsapp
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -17,7 +16,6 @@ import eg.gov.iti.jets.newsapp.util.NetworkConnectivityObserver
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomNavigation: BottomNavigationView
@@ -33,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(bottomNavigation, navController)
         setUpNavBottom(navController)
 
-//        hideKeyBoard()
+        hideKeyBoard()
     }
 
     private fun hideKeyBoard(){

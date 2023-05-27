@@ -11,7 +11,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = Constants.ARTICLE_TABLE)
 data class Article(
-    @Embedded val source: ArticleSource?,
     val author: String?,
     val title: String,
     val description: String?,
@@ -19,8 +18,8 @@ data class Article(
     val urlToImage: String?,
     val publishedAt: String,
     val content: String?,
-    @PrimaryKey val articleId: Int = publishedAt.hashCode()+ title.hashCode()
+    @PrimaryKey var articleId: Int
 ) :Parcelable
 fun Article.convertToFavorite():FavouriteArticleModel{
-    return FavouriteArticleModel(source?: ArticleSource("",""),author?:"",title,description?:"",url?:"",urlToImage?:"",publishedAt,content?:"",articleId)
+    return FavouriteArticleModel(author?:"",title,description?:"",url?:"",urlToImage?:"",publishedAt,content?:"",articleId)
 }
