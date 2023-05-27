@@ -56,17 +56,16 @@ class SignUpFragment : Fragment() {
             Navigation.findNavController(it)
                 .navigate(R.id.action_signUpFragment_to_loginFragment)
         }
-            binding?.btnSignUp?.setOnClickListener {
-                Log.e("TAG", "onClicks: ")
-                val email = binding?.emailEdiText?.text.toString().trim()
-                val userName = binding?.userNameEdiText?.text.toString().trim()
-                val password = binding?.passwordEditText?.text.toString().trim()
-                signUpModel =
-                    SignUpModel(email = email, password = password, displayName = userName)
-                signUpViewModel.validateInputs(signUpModel)
-            }
+        binding?.btnSignUp?.setOnClickListener {
+            Log.e("TAG", "onClicks: ")
+            val email = binding?.emailEdiText?.text.toString().trim()
+            val userName = binding?.userNameEdiText?.text.toString().trim()
+            val password = binding?.passwordEditText?.text.toString().trim()
+            signUpModel =
+                SignUpModel(email = email, password = password, displayName = userName)
+            signUpViewModel.validateInputs(signUpModel)
         }
-
+    }
 
 
     private fun observeData() {
@@ -74,6 +73,7 @@ class SignUpFragment : Fragment() {
             signUpViewModel.validationStateFlow.collect {
                 when (it) {
                     is AuthState.onSuccess -> {
+                      navigateToNextScreen()
                         Toast.makeText(
                             requireActivity().applicationContext,
                             getString(it.message),
@@ -98,6 +98,11 @@ class SignUpFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun navigateToNextScreen(){
+        Navigation.findNavController(requireView())
+            .navigate(R.id.action_signUpFragment_to_homeFragment)
     }
 
     override fun onDestroy() {
