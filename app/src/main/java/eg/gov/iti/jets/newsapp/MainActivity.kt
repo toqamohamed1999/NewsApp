@@ -3,6 +3,7 @@ package eg.gov.iti.jets.newsapp
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -29,8 +30,11 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(bottomNavigation, navController)
         setUpNavBottom(navController)
 
-        navController.navigate(R.id.homeFragment)
+        hideSoftKeyBoard()
+    }
 
+    private fun hideSoftKeyBoard() {
+        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     private fun setUpNavBottom(navController: NavController) {
