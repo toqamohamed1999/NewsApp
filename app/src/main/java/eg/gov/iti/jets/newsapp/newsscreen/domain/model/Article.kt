@@ -1,9 +1,11 @@
 package eg.gov.iti.jets.newsapp.newsscreen.domain.model
 
+import android.util.Log
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import eg.gov.iti.jets.newsapp.util.Constants
+import java.util.*
 
 @Entity(tableName = Constants.ARTICLE_TABLE)
 data class Article(
@@ -15,5 +17,5 @@ data class Article(
     val urlToImage: String?,
     val publishedAt: String,
     val content: String?,
-    @PrimaryKey val articleId: Int = publishedAt.hashCode()+ title.hashCode()
+    @PrimaryKey var articleId: Int
 )

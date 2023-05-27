@@ -15,6 +15,7 @@ import eg.gov.iti.jets.newsapp.util.MyNetworkStatus
 import eg.gov.iti.jets.newsapp.util.NetworkConnectivityObserver
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bottomNavigation: BottomNavigationView

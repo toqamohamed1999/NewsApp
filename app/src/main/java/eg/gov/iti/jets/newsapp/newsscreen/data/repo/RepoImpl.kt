@@ -1,5 +1,6 @@
 package eg.gov.iti.jets.newsapp.newsscreen.data.repo
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import eg.gov.iti.jets.newsapp.newsscreen.data.local.ArticleLocalSource
 import eg.gov.iti.jets.newsapp.newsscreen.data.model.NewsResultState
@@ -22,6 +23,8 @@ class RepoImpl private constructor(
     private var localeSource: ArticleLocalSourceI
 ) :  NewsRepo{
 
+    private val TAG = "RepoImpl"
+
     companion object {
         private var instance: NewsRepo? = null
 
@@ -39,15 +42,15 @@ class RepoImpl private constructor(
     }
 
     override suspend fun getNews(country : String): Flow<List<Article>> {
-        var articles :Flow<List<Article>> = flowOf()
+        var articles : Flow<List<Article>> = flowOf()
             try {
                 remoteSource.getNews().let {
                     deleteAllArticles()
-                    insertArticles(it)
+                    insertArticles(giveArticleId(it))
                     articles = flowOf(it)
                 }
             } catch (e: java.lang.Exception) {
-                val message = e.message
+                Log.i(TAG, "getNews: ${e.message}")
                 articles = localeSource.getStoredArticles()
             }
         return articles
@@ -59,6 +62,15 @@ class RepoImpl private constructor(
 
     override suspend fun deleteAllArticles() {
         localeSource.deleteAllArticles()
+    }
+
+    private fun giveArticleId(articles : List<Article>) : List<Article>{
+        for (article in articles) {
+            article.apply {
+                articleId = publishedAt.hashCode() + title.hashCode()
+            }
+        }
+        return articles
     }
 
 }
