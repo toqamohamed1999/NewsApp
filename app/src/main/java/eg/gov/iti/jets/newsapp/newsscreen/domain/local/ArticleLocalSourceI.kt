@@ -8,7 +8,7 @@ interface ArticleLocalSourceI {
 
     fun getStoredArticles (): Flow<List<Article>>
 
-    suspend fun insertArticle(article : Article): Long
+    suspend fun insertArticles(articles : List<Article>): List<Long>
 
     suspend fun deleteArticle(article : Article): Int
 

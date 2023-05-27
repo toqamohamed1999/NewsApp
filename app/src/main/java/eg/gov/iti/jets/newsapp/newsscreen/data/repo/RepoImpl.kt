@@ -1,13 +1,21 @@
 package eg.gov.iti.jets.newsapp.newsscreen.data.repo
 
+import androidx.lifecycle.viewModelScope
 import eg.gov.iti.jets.newsapp.newsscreen.data.local.ArticleLocalSource
+import eg.gov.iti.jets.newsapp.newsscreen.data.model.NewsResultState
 import eg.gov.iti.jets.newsapp.newsscreen.domain.local.ArticleLocalSourceI
 import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
 import eg.gov.iti.jets.newsapp.newsscreen.domain.model.NewsModel
 import eg.gov.iti.jets.newsapp.newsscreen.domain.remote.ArticleRemoteSourceI
 import eg.gov.iti.jets.newsapp.newsscreen.domain.remote.NewsAPIInterface
 import eg.gov.iti.jets.newsapp.newsscreen.domain.repo.NewsRepo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 
 class RepoImpl private constructor(
     private var remoteSource: ArticleRemoteSourceI,
@@ -30,12 +38,23 @@ class RepoImpl private constructor(
         }
     }
 
-    override suspend fun getNews(country : String): Flow<NewsModel> {
-        return remoteSource.getNews()
+    override suspend fun getNews(country : String): Flow<List<Article>> {
+        var articles :Flow<List<Article>> = flowOf()
+            try {
+                remoteSource.getNews().let {
+                    deleteAllArticles()
+                    insertArticles(it)
+                    articles = flowOf(it)
+                }
+            } catch (e: java.lang.Exception) {
+                val message = e.message
+                articles = localeSource.getStoredArticles()
+            }
+        return articles
     }
 
-    override suspend fun getStoredNews() : Flow<List<Article>> {
-        return localeSource.getStoredArticles()
+    override suspend fun insertArticles(articles: List<Article>):  List<Long> {
+        return localeSource.insertArticles(articles)
     }
 
     override suspend fun deleteAllArticles() {

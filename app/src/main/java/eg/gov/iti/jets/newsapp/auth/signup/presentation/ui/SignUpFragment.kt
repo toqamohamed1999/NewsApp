@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -19,10 +20,6 @@ import eg.gov.iti.jets.newsapp.auth.signup.presentation.viewmodel.SignUpViewMode
 import eg.gov.iti.jets.newsapp.base.remote.APIClient
 import eg.gov.iti.jets.newsapp.base.remote.AppRetrofit
 import eg.gov.iti.jets.newsapp.databinding.FragmentSignUpBinding
-import retrofit2.Retrofit
-import retrofit2.create
-import java.util.regex.Pattern
-import kotlin.math.sign
 
 
 class SignUpFragment : Fragment() {
@@ -42,7 +39,6 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         onClicks()
-        observeData()
     }
 
     private fun initViewModel() {
@@ -52,7 +48,7 @@ class SignUpFragment : Fragment() {
     }
 
     private fun onClicks() {
-        binding?.textViewSignUp?.setOnClickListener {
+        binding?.textViewSignIn?.setOnClickListener {
             Navigation.findNavController(it)
                 .navigate(R.id.action_signUpFragment_to_loginFragment)
         }
@@ -63,7 +59,12 @@ class SignUpFragment : Fragment() {
             val password = binding?.passwordEditText?.text.toString().trim()
             signUpModel =
                 SignUpModel(email = email, password = password, displayName = userName)
+            binding?.progressBar?.visibility = View.VISIBLE
             signUpViewModel.validateInputs(signUpModel)
+            observeData()
+            observeErrorMessage()
+
+
         }
     }
 
@@ -73,7 +74,8 @@ class SignUpFragment : Fragment() {
             signUpViewModel.validationStateFlow.collect {
                 when (it) {
                     is AuthState.onSuccess -> {
-                      navigateToNextScreen()
+                        binding?.progressBar?.visibility = View.GONE
+                        navigateToNextScreen()
                         Toast.makeText(
                             requireActivity().applicationContext,
                             getString(it.message),
@@ -82,6 +84,7 @@ class SignUpFragment : Fragment() {
                     }
 
                     is AuthState.onError -> {
+                        binding?.progressBar?.visibility = View.GONE
                         Toast.makeText(
                             requireActivity().applicationContext,
                             getString(it.message),
@@ -89,18 +92,28 @@ class SignUpFragment : Fragment() {
                         ).show()
                     }
                     else -> {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.failed),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        binding?.progressBar?.visibility = View.VISIBLE
                     }
                 }
             }
         }
     }
 
-    private fun navigateToNextScreen(){
+    private fun observeErrorMessage() {
+        lifecycleScope.launchWhenCreated {
+            signUpViewModel.errorStateFlow.collect { it ->
+                binding?.progressBar?.visibility = View.GONE
+                Toast.makeText(
+                    requireActivity().applicationContext,
+                    it?.message ?: "",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+    }
+
+    private fun navigateToNextScreen() {
         Navigation.findNavController(requireView())
             .navigate(R.id.action_signUpFragment_to_homeFragment)
     }

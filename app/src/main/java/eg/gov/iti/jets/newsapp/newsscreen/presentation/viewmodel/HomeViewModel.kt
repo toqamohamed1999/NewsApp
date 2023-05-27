@@ -3,6 +3,9 @@ package eg.gov.iti.jets.newsapp.newsscreen.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import eg.gov.iti.jets.newsapp.favourite.data.repo.FavouriteRepoImp
+import eg.gov.iti.jets.newsapp.favourite.domain.model.FavResultState
+import eg.gov.iti.jets.newsapp.favourite.domain.repo.FavRepoInterface
 import eg.gov.iti.jets.newsapp.newsscreen.data.model.NewsResultState
 import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
 import eg.gov.iti.jets.newsapp.newsscreen.domain.repo.NewsRepo
@@ -10,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class HomeViewModel (private val newsRepo: NewsRepo): ViewModel() {
+class HomeViewModel(private val newsRepo: NewsRepo) : ViewModel() {
 
     private var _newsState: MutableStateFlow<NewsResultState> = MutableStateFlow(
         NewsResultState.Loading()
@@ -24,19 +27,7 @@ class HomeViewModel (private val newsRepo: NewsRepo): ViewModel() {
     private fun getNews() {
         viewModelScope.launch {
             try {
-                 newsRepo.getNews().collect{
-                    _newsState.value = NewsResultState.Success(it.articles)
-                }
-            } catch (e: java.lang.Exception) {
-                _newsState.value = NewsResultState.Error()
-            }
-        }
-    }
-
-    private fun getStoredNews() {
-        viewModelScope.launch {
-            try {
-                newsRepo.getStoredNews().collect{
+                newsRepo.getNews().collect {
                     _newsState.value = NewsResultState.Success(it)
                 }
             } catch (e: java.lang.Exception) {
@@ -44,6 +35,7 @@ class HomeViewModel (private val newsRepo: NewsRepo): ViewModel() {
             }
         }
     }
+
 
     fun searchArticles(articles: List<Article>, query: String): List<Article> {
         val filteredArticles = mutableListOf<Article>()
