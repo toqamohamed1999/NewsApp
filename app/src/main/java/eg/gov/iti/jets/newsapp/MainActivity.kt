@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpNavBottom(navController: NavController) {
         navController.addOnDestinationChangedListener { _, navDestination, _ ->
-            if (navDestination.id == R.id.signUpFragment || navDestination.id == R.id.loginFragment
+            if (navDestination.id == R.id.signUpFragment || navDestination.id == R.id.loginFragment || navDestination.id == R.id.splashFragment
             ) {
                 bottomNavigation.visibility = View.GONE
             } else {
