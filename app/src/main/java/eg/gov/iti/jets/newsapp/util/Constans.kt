@@ -9,6 +9,8 @@ class Constants {
         const val LOGIN_URL = "v1/accounts:signInWithPassword"
         const val EMAIL = "email"
         const val TOKEN = "token"
+        const val BASE_URL_NEWS = "https://newsapi.org/"
+        const val NEWS ="v2/top-headlines"
         const val ARTICLE_TABLE = "article"
     }
 }

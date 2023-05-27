@@ -19,4 +19,8 @@
     <string name="userNameEmpty">Username must not be empty</string>
     <string name="success">Sign up Successfully</string>
     <string name="failed">Failed to try Data</string>
+    <string name="news">News</string>
+    <string name="title">Title</string>
+    <string name="auther">auther</string>
+    <string name="desc">description</string>
 </resources>
