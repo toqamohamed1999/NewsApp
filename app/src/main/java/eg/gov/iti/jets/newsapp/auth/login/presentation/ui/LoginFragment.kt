@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,7 @@ import eg.gov.iti.jets.newsapp.auth.login.presentation.viewmodel.LoginViewModelF
 import eg.gov.iti.jets.newsapp.base.remote.APIClient
 import eg.gov.iti.jets.newsapp.databinding.FragmentLoginBinding
 import eg.gov.iti.jets.newsapp.util.Dialogs
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -45,11 +47,21 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val factory = LoginViewModelFactory(LoginRepoImpl(APIClient.loginAPIService))
                 viewModel = ViewModelProvider(this,factory)[LoginViewModel::class.java]
+
         lifecycleScope.launch {
+            viewModel.checkUserInSharedPrefs().collect{
+                if(it.email.isEmpty()){
+                    Toast.makeText(requireContext(),"Failed to login",Toast.LENGTH_SHORT).show()
+                }else{
+                    viewModel.login(BuildConfig.API_KEY, LoginModel(it.email,it.password,true))
+                }
+            }
             viewModel.loginState.collect {
                 when(it){
                     is LoginResponseState.Success ->{
+                        Log.e("",it.response.registered.toString())
                         Toast.makeText(requireContext(),"Go to main",Toast.LENGTH_SHORT).show()
+                        viewModel.saveUserDataToSharedPrefs(it.response)
                     }
                     is LoginResponseState.Error ->{
                         Dialogs.getAletDialogBuilder(requireContext(),"Login","Unsuccessful  Login").show()
@@ -63,20 +75,20 @@ class LoginFragment : Fragment() {
         binding.emailEdiText.doAfterTextChanged {
            if(!viewModel.validateEmail(binding.emailEdiText.text.toString()))
            {
-                binding.emailEdiText.highlightColor = Color.RED
+                binding.emailEdiText.setTextColor(Color.RED)
                this.validEmail = false
            }else{
-               binding.emailEdiText.highlightColor = Color.GREEN
+               binding.emailEdiText.setTextColor(Color.GREEN)
                this.validEmail = true
            }
         }
         binding.passwordEdiText.doAfterTextChanged {
             if(!viewModel.validatePassword(binding.passwordEdiText.text.toString()))
             {
-                binding.passwordEdiText.highlightColor = Color.RED
+                binding.passwordEdiText.setTextColor(Color.RED)
                 this.validPassword = false
             }else{
-                binding.passwordEdiText.highlightColor = Color.GREEN
+                binding.passwordEdiText.setTextColor(Color.GREEN)
                 this.validPassword = true
             }
         }
