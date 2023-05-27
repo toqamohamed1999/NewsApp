@@ -6,6 +6,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -13,6 +15,10 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import eg.gov.iti.jets.newsapp.util.MyNetworkStatus
 import eg.gov.iti.jets.newsapp.util.NetworkConnectivityObserver
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -30,11 +36,24 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(bottomNavigation, navController)
         setUpNavBottom(navController)
 
-        hideSoftKeyBoard()
+        hideKeyBoard()
     }
 
-    private fun hideSoftKeyBoard() {
-        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+    private fun hideKeyBoard(){
+        KeyboardVisibilityEvent.setEventListener(
+            this
+        ) { isOpen ->
+            Log.d("TAG", "onVisibilityChanged: Keyboard visibility changed")
+            if (isOpen) {
+                Log.d("TAG", "onVisibilityChanged: Keyboard is open")
+                bottomNavigation.isVisible = false
+                Log.d("TAG", "onVisibilityChanged: NavBar got Invisible")
+            } else {
+                Log.d("TAG", "onVisibilityChanged: Keyboard is closed")
+                bottomNavigation.isVisible = true
+                Log.d("TAG", "onVisibilityChanged: NavBar got Visible")
+            }
+        }
     }
 
     private fun setUpNavBottom(navController: NavController) {
@@ -43,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 bottomNavigation.visibility = View.GONE
             } else {
+                hideKeyBoard()
                 bottomNavigation.visibility = View.VISIBLE
             }
         }

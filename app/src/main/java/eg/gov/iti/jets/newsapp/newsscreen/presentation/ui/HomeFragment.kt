@@ -6,8 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
+import android.widget.ArrayAdapter
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -85,6 +88,41 @@ class HomeFragment : Fragment() {
                         binding.shimmerViewContainer.visibility = View.GONE
                         articlesList = it.articleList
                         articleAdapter.submitList(articlesList)
+                        Log.i(TAG, "observeNewsData: "+it.articleList)
+                        binding.progressBar.visibility = View.GONE
+
+                        var filterTitle = viewModel.getTitleArtical(articlesList)
+                        var complete = binding.autoCompleteTextView
+                        var completeAdapter = ArrayAdapter<String>(
+                            requireContext(),
+                            R.layout.simple_dropdown_item_1line, filterTitle
+                        )
+                        complete.setAdapter(completeAdapter)
+                        complete.setOnItemClickListener { parent, view, position, id ->
+                            binding.searchView.setQuery(parent.getItemAtPosition(position) as String, true)
+                        }
+                        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                            override fun onQueryTextSubmit(query: String?): Boolean {
+                                complete.setText("")
+
+                                val filterArticalList = viewModel.searchArticles(articlesList,query ?: "")
+                                articleAdapter.submitList(filterArticalList)
+
+                                return false
+                            }
+
+                            override fun onQueryTextChange(newText: String?): Boolean {
+                                newText?.let {
+                                    val filterArticalList = viewModel.searchArticles(articlesList,it)
+                                    articleAdapter.submitList(filterArticalList)
+                                }
+                                return true
+                            }
+
+
+                        })
+
+
                     }
                     else -> {
                         binding.shimmerViewContainer.visibility = View.VISIBLE

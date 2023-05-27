@@ -17,6 +17,7 @@
         android:theme="@style/Theme.NewsApp"
         tools:targetApi="31">
         <activity
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
