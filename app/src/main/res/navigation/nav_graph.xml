@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/signUpFragment">
 
     <fragment
         android:id="@+id/signUpFragment"
@@ -18,25 +18,14 @@
             app:destination="@id/homeFragment" />
     </fragment>
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="eg.gov.iti.jets.newsapp.newsscreen.presentation.ui.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_homeFragment_to_newsDetailsFragment2"
-            app:destination="@id/newsDetailsFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/loginFragment"
         android:name="eg.gov.iti.jets.newsapp.auth.login.presentation.ui.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_sign_up" />
     <fragment
-        android:id="@+id/newsDetailsFragment"
-        android:name="eg.gov.iti.jets.newsapp.newsdetails.presentation.ui.NewsDetailsFragment"
-        android:label="NewsDetailsFragment" />
+        android:id="@+id/homeFragment"
+        android:name="eg.gov.iti.jets.newsapp.newsscreen.presentation.ui.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
 </navigation>
