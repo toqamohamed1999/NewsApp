@@ -98,15 +98,16 @@ class HomeFragment : Fragment() {
                             R.layout.simple_dropdown_item_1line, filterTitle
                         )
                         complete.setAdapter(completeAdapter)
-                        complete.setThreshold(1)
-
                         complete.setOnItemClickListener { parent, view, position, id ->
-                            binding.searchView.setQuery(filterTitle.get(position), true)
+                            binding.searchView.setQuery(parent.getItemAtPosition(position) as String, true)
                         }
                         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                             override fun onQueryTextSubmit(query: String?): Boolean {
+                                complete.setText("")
+
                                 val filterArticalList = viewModel.searchArticles(articlesList,query ?: "")
                                 articleAdapter.submitList(filterArticalList)
+
                                 return false
                             }
 
@@ -117,6 +118,8 @@ class HomeFragment : Fragment() {
                                 }
                                 return true
                             }
+
+
                         })
 
 
