@@ -15,5 +15,9 @@ interface FavouriteDao {
 
     @Query("select * from ${Constants.FAVOURITE_TABLE_NAME}")
     fun getAllFavouritePlaces(): Flow<List<FavouriteArticleModel>>
+    @Query("select count(*) from ${Constants.FAVOURITE_TABLE_NAME} where articleId = :id")
+    fun isFavorite(id:Int):Int
 
+    @Query("DELETE FROM ${Constants.FAVOURITE_TABLE_NAME} WHERE articleId = :id")
+    fun deleteFromFavorites(id:Int)
 }
