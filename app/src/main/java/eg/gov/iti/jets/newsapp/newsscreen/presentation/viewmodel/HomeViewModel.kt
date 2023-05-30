@@ -3,9 +3,6 @@ package eg.gov.iti.jets.newsapp.newsscreen.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import eg.gov.iti.jets.newsapp.favourite.data.repo.FavouriteRepoImp
-import eg.gov.iti.jets.newsapp.favourite.domain.model.FavResultState
-import eg.gov.iti.jets.newsapp.favourite.domain.repo.FavRepoInterface
 import eg.gov.iti.jets.newsapp.newsscreen.data.model.NewsResultState
 import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
 import eg.gov.iti.jets.newsapp.newsscreen.domain.repo.NewsRepo
@@ -18,17 +15,20 @@ class HomeViewModel(private val newsRepo: NewsRepo) : ViewModel() {
     private var _newsState: MutableStateFlow<NewsResultState> = MutableStateFlow(
         NewsResultState.Loading()
     )
+    private val _stateAutoComplete:MutableStateFlow<List<String>> = MutableStateFlow(listOf())
+    val stateAutoComplete:StateFlow<List<String>> = _stateAutoComplete
+    private val  _articleSearchState:MutableStateFlow<List<Article>> = MutableStateFlow(listOf())
+    val  articleSearchState:StateFlow<List<Article>> =  _articleSearchState
+
+    private var articles = listOf<Article>()
     var newsState: StateFlow<NewsResultState> = _newsState
 
-    init {
-        getNews()
-    }
-
-    private fun getNews() {
+     fun getNews() {
         viewModelScope.launch {
             try {
                 newsRepo.getNews().collect {
                     _newsState.value = NewsResultState.Success(it)
+                    articles = it
                 }
             } catch (e: java.lang.Exception) {
                 _newsState.value = NewsResultState.Error()
@@ -36,24 +36,28 @@ class HomeViewModel(private val newsRepo: NewsRepo) : ViewModel() {
         }
     }
 
-
-    fun searchArticles(articles: List<Article>, query: String): List<Article> {
+    fun searchArticles(query: String?) {
+        if(query.isNullOrBlank()){
+            _articleSearchState.value = articles
+        }
         val filteredArticles = mutableListOf<Article>()
         for (article in articles) {
-            if (article.title.contains(query, true)) {
+            if (article.title.contains(query!!, true)) {
                 filteredArticles.add(article)
             }
         }
-        return filteredArticles
+        _articleSearchState.value = filteredArticles
     }
-
-    fun getTitleArtical(articles: List<Article>): List<String> {
-        var filteredTitleArticles = mutableListOf<String>()
-        for (i in 0..articles.size-1) {
-            var stringTitle = articles[i].title
+    fun search(query: String?) {
+        if(query.isNullOrBlank()){
+            return
+        }
+        val filteredTitleArticles = mutableListOf<String>()
+        for (element in articles) {
+            val stringTitle = element.title
             filteredTitleArticles.add(stringTitle)
         }
-        return filteredTitleArticles
+        _stateAutoComplete.value =  filteredTitleArticles
     }
 
 

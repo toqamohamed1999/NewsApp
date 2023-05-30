@@ -1,20 +1,23 @@
 package eg.gov.iti.jets.newsapp.newsscreen.presentation.ui
 
-import android.R
+import android.annotation.SuppressLint
+import android.app.SearchManager
+import android.database.Cursor
+import android.database.MatrixCursor
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.CursorAdapter
 import android.widget.SearchView
-import android.widget.Toast
+import android.widget.SimpleCursorAdapter
 import androidx.fragment.app.Fragment
-import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.facebook.shimmer.ShimmerFrameLayout
+import eg.gov.iti.jets.newsapp.R
 import eg.gov.iti.jets.newsapp.databinding.FragmentHomeBinding
 import eg.gov.iti.jets.newsapp.newsscreen.data.local.ArticleLocalSource
 import eg.gov.iti.jets.newsapp.newsscreen.data.model.NewsResultState
@@ -23,15 +26,16 @@ import eg.gov.iti.jets.newsapp.newsscreen.data.repo.RepoImpl
 import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
 import eg.gov.iti.jets.newsapp.newsscreen.presentation.viewmodel.HomeViewModel
 import eg.gov.iti.jets.newsapp.newsscreen.presentation.viewmodel.HomeViewModelFactory
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newFixedThreadPoolContext
 
 
 class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
-
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+    lateinit var searchAdapter: SimpleCursorAdapter
+    private  val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
+    private val to = intArrayOf(R.id.searchItemID)
+    private var binding: FragmentHomeBinding? = null
     private lateinit var articleAdapter: ArticleAdapter
     private var articlesList: List<Article> = ArrayList()
 
@@ -51,10 +55,10 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View?{
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,85 +66,96 @@ class HomeFragment : Fragment() {
 
         setUpArticleRecyclerView()
         observeNewsData()
+        viewModel.getNews()
+        prepareSearchView()
     }
+private fun prepareSearchView(){
+    searchAdapter = SimpleCursorAdapter(context,
+        R.layout.suggetionlayout,
+        null,
+        from,
+        to,
+        CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
+    binding?.searchView?.suggestionsAdapter = searchAdapter
+    binding?.searchView?.setOnQueryTextListener(
+        object: android.widget.SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            viewModel.searchArticles(query)
+            return  true
+        }
+        override fun onQueryTextChange(newText: String?): Boolean {
+            viewModel.search(query =newText)
+            viewModel.searchArticles(newText)
+            return  true
+        }
+    })
+    binding?.searchView?.setOnSuggestionListener(object: SearchView.OnSuggestionListener {
+        override fun onSuggestionSelect(position: Int): Boolean {
+            return false
+        }
 
+        @SuppressLint("Range")
+        override fun onSuggestionClick(position: Int): Boolean {
+            val cursor = binding?.searchView?.suggestionsAdapter?.getItem(position) as Cursor
+            val selection =
+                cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
+            viewModel.searchArticles(selection)
+            return  true
+        }
+    })
+    lifecycleScope.launch {
+        viewModel.articleSearchState.collect{
+            articlesList = it
+            articleAdapter.submitList(articlesList)
+        }
+    }
+    lifecycleScope.launch{
+        viewModel.stateAutoComplete.collect{
+             val cursor = MatrixCursor(
+                    arrayOf(
+                        BaseColumns._ID,
+                        SearchManager.SUGGEST_COLUMN_TEXT_1
+                    )
+                )
+                it.forEachIndexed { index, s ->
+                        cursor.addRow(arrayOf(index, s))
+                }
+                searchAdapter.changeCursor(cursor)
+        }
+    }
+}
     private fun setUpArticleRecyclerView() {
         articleAdapter = ArticleAdapter()
-
-        binding.articlesRecyclerView.apply {
+        articlesList = listOf()
+        binding?.articlesRecyclerView?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = articleAdapter
+
         }
     }
 
     private fun observeNewsData() {
-
         lifecycleScope.launch {
-            viewModel.newsState.collectLatest {
+            viewModel.newsState.collect {
                 when (it) {
                     is NewsResultState.Loading -> {
-                        binding.articlesRecyclerView.visibility = View.GONE
-                        binding.shimmerViewContainer.visibility = View.VISIBLE
-                        binding.shimmerViewContainer.startShimmer()
+                        binding?.articlesRecyclerView?.visibility = View.GONE
+                        binding?.shimmerViewContainer?.visibility = View.VISIBLE
+                        binding?.shimmerViewContainer?.startShimmer()
                     }
                     is NewsResultState.Success -> {
-                        binding.articlesRecyclerView.visibility = View.VISIBLE
-                        binding.shimmerViewContainer.visibility = View.GONE
+                        binding?.articlesRecyclerView?.visibility = View.VISIBLE
+                        binding?.shimmerViewContainer?.visibility = View.GONE
                         articlesList = it.articleList
                         articleAdapter.submitList(articlesList)
-                        Log.i(TAG, "observeNewsData: "+it.articleList)
-                        binding.progressBar.visibility = View.GONE
-
-                        var filterTitle = viewModel.getTitleArtical(articlesList)
-                        var complete = binding.autoCompleteTextView
-                        var completeAdapter = ArrayAdapter<String>(
-                            requireContext(),
-                            R.layout.simple_dropdown_item_1line, filterTitle
-                        )
-                        complete.setAdapter(completeAdapter)
-                        complete.setOnItemClickListener { parent, view, position, id ->
-                            binding.searchView.setQuery(parent.getItemAtPosition(position) as String, true)
-                        }
-                        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                            override fun onQueryTextSubmit(query: String?): Boolean {
-                                complete.setText("")
-
-                                val filterArticalList = viewModel.searchArticles(articlesList,query ?: "")
-                                articleAdapter.submitList(filterArticalList)
-
-                                return false
-                            }
-
-                            override fun onQueryTextChange(newText: String?): Boolean {
-                                newText?.let {
-                                    val filterArticalList = viewModel.searchArticles(articlesList,it)
-                                    articleAdapter.submitList(filterArticalList)
-                                }
-                                return true
-                            }
-
-
-                        })
-
-
                     }
                     else -> {
-                        binding.shimmerViewContainer.visibility = View.VISIBLE
-                        binding.articlesRecyclerView.visibility = View.GONE
+                        binding?.shimmerViewContainer?.visibility = View.VISIBLE
+                        binding?.articlesRecyclerView?.visibility = View.GONE
                         Log.i(TAG, "getNewsDataFromApi: $it")
                     }
                 }
             }
         }
     }
-
-
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-
 }
