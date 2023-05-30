@@ -28,7 +28,7 @@ class AdapterFavouriteList (private var articlesList: List<FavouriteArticleModel
 
     fun setData(value: List<FavouriteArticleModel>){
         this.articlesList = value
-
+        notifyDataSetChanged()
     }
 
     class ViewHolder(private val binding: RowFavouriteListBinding): RecyclerView.ViewHolder(binding.root) {

@@ -7,6 +7,7 @@ import eg.gov.iti.jets.newsapp.favourite.data.repo.FavouriteRepoImp
 import eg.gov.iti.jets.newsapp.favourite.domain.model.FavResultState
 import eg.gov.iti.jets.newsapp.favourite.domain.repo.FavRepoInterface
 import eg.gov.iti.jets.newsapp.newsscreen.data.model.NewsResultState
+import eg.gov.iti.jets.newsapp.newsscreen.domain.model.Article
 import eg.gov.iti.jets.newsapp.newsscreen.domain.repo.NewsRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,6 +33,27 @@ class HomeViewModel(private val newsRepo: NewsRepo) : ViewModel() {
             }
         }
     }
+
+
+    fun searchArticles(articles: List<Article>, query: String): List<Article> {
+        val filteredArticles = mutableListOf<Article>()
+        for (article in articles) {
+            if (article.title.contains(query, true)) {
+                filteredArticles.add(article)
+            }
+        }
+        return filteredArticles
+    }
+
+    fun getTitleArtical(articles: List<Article>): List<String> {
+        var filteredTitleArticles = mutableListOf<String>()
+        for (i in 0..articles.size-1) {
+            var stringTitle = articles[i].title
+            filteredTitleArticles.add(stringTitle)
+        }
+        return filteredTitleArticles
+    }
+
 
 }
 

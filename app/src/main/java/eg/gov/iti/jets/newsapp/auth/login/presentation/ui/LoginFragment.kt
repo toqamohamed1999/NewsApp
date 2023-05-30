@@ -67,7 +67,7 @@ class LoginFragment : Fragment() {
                     view.findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                 }
                 else{
-//                    Dialogs.SnakeToast(view,"Please Login First")
+                    Dialogs.SnakeToast(view,"Please Login First")
                 }
             }
         }
