@@ -19,11 +19,9 @@ class HomeViewModel(private val newsRepo: NewsRepo) : ViewModel() {
     )
     var newsState: StateFlow<NewsResultState> = _newsState
 
-    init {
-        getNews()
-    }
 
-    private fun getNews() {
+
+     fun getNews() {
         viewModelScope.launch {
             try {
                 newsRepo.getNews().collect {

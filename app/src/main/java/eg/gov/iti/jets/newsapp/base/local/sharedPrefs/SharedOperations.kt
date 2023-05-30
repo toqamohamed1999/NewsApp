@@ -8,13 +8,12 @@ class SharedOperations private constructor() {
 
     companion object {
         private var instance: SharedOperations? = null
-        private lateinit var context: Context
 
         private lateinit var sharedPrefs: SharedPreferences
         fun initSharedPrefs(context: Context) {
-            this.context = context
+
             sharedPrefs =
-                Companion.context.applicationContext.getSharedPreferences(
+                context.applicationContext.getSharedPreferences(
                     "CurrentUser",
                     Context.MODE_PRIVATE
                 )

@@ -27,8 +27,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
 
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentHomeBinding? = null
     private lateinit var articleAdapter: ArticleAdapter
     private var articlesList: List<Article> = ArrayList()
 
@@ -48,10 +47,10 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View?{
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,48 +58,40 @@ class HomeFragment : Fragment() {
 
         setUpArticleRecyclerView()
         observeNewsData()
+        viewModel.getNews()
     }
 
     private fun setUpArticleRecyclerView() {
         articleAdapter = ArticleAdapter()
-
-        binding.articlesRecyclerView.apply {
+        articlesList = listOf()
+        binding?.articlesRecyclerView?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = articleAdapter
         }
     }
 
     private fun observeNewsData() {
-
         lifecycleScope.launch {
-            viewModel.newsState.collectLatest {
+            viewModel.newsState.collect {
                 when (it) {
                     is NewsResultState.Loading -> {
-                        binding.articlesRecyclerView.visibility = View.GONE
-                        binding.shimmerViewContainer.visibility = View.VISIBLE
-                        binding.shimmerViewContainer.startShimmer()
+                        binding?.articlesRecyclerView?.visibility = View.GONE
+                        binding?.shimmerViewContainer?.visibility = View.VISIBLE
+                        binding?.shimmerViewContainer?.startShimmer()
                     }
                     is NewsResultState.Success -> {
-                        binding.articlesRecyclerView.visibility = View.VISIBLE
-                        binding.shimmerViewContainer.visibility = View.GONE
+                        binding?.articlesRecyclerView?.visibility = View.VISIBLE
+                        binding?.shimmerViewContainer?.visibility = View.GONE
                         articlesList = it.articleList
                         articleAdapter.submitList(articlesList)
                     }
                     else -> {
-                        binding.shimmerViewContainer.visibility = View.VISIBLE
-                        binding.articlesRecyclerView.visibility = View.GONE
+                        binding?.shimmerViewContainer?.visibility = View.VISIBLE
+                        binding?.articlesRecyclerView?.visibility = View.GONE
                         Log.i(TAG, "getNewsDataFromApi: $it")
                     }
                 }
             }
         }
     }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-
 }
