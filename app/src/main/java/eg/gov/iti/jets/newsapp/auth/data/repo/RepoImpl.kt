@@ -10,6 +10,5 @@ class RepoImpl(private val signUpAPIInterface: SignUpAPIInterface) : AuthRepo {
 
     override suspend fun signUpSignUpModel(key: String, userModel: SignUpModel): SignUpResponse {
         return signUpAPIInterface.signUpUser(key, userModel)
-
     }
 }
